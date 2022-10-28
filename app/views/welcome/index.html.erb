@@ -4,12 +4,35 @@
   </div>
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
-      <%= form_tag :parks, method: :get, class: "form-inline" do %>
-        <div class="form-group search-field">
-          <%= select_tag :state, options_for_select(us_states) %>
-          <%= submit_tag "Find Parks", class: "btn btn-primary" %>
-        </div>
+      <%= form_with url: root_path, method: :get do |f| %>
+        <%= f.select :state, options_for_select(us_states) %>
+        <%= f.submit "Find Parks" %>
       <% end %>
     </ul>
   </div>
 </nav>
+
+<div class="search-results">
+  <% if !@parks.nil? %>
+    <%= "Parks in #{@state}: #{@parks.count}" %>
+    <ul>
+      <% @parks.each do |park| %>
+        <li id=<%= park.name %>>
+          <h3><%= park.name %></h3>
+          <p><%= park.description %></p>
+          <p>Directions: <%= park.directions %></p>
+          <p>Hours of Operation</p>
+          <ul>
+            <li>Monday: <%= park.hours[:monday] %></li>
+            <li>Tuesday: <%= park.hours[:tuesday] %></li>
+            <li>Wednesday: <%= park.hours[:wednesday] %></li>
+            <li>Thursday: <%= park.hours[:thursday] %></li>
+            <li>Friday: <%= park.hours[:friday] %></li>
+            <li>Saturday: <%= park.hours[:saturday] %></li>
+            <li>Sunday: <%= park.hours[:sunday] %></li>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
